@@ -1,13 +1,16 @@
 // cook-staking-app/src/App.jsx
 import { useEffect, useState } from "react";
 import {
-  ThirdwebProvider,
-  useWallet,
-  useConnectWallet,
-  useDisconnect,
-  useActiveWalletConnectionStatus,
-  ConnectButton,
-} from "thirdweb/react";
+ <ThirdwebProvider
+  client={client}
+  activeChain={base}
+  wallets={[
+    metamaskWallet(),
+    coinbaseWallet(),
+    walletConnect(),
+  ]}
+>
+
 import {
   createThirdwebClient,
   defineChain,
@@ -139,8 +142,17 @@ function StakingPage() {
 
 export default function App() {
   return (
-    <ThirdwebProvider client={client} activeChain={base}>
+    <ThirdwebProvider
+      client={client}
+      activeChain={base}
+      wallets={[
+        metamaskWallet(),
+        coinbaseWallet(),
+        walletConnect(),
+      ]}
+    >
       <StakingPage />
     </ThirdwebProvider>
   );
 }
+
