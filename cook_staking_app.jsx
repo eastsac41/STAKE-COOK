@@ -23,7 +23,7 @@ const client = createThirdwebClient({
 
 const base = defineChain(8453);
 const STAKING_CONTRACT = "0x455145789A6EFC690883b9E2467051169A839766";
-const COOK_TOKEN = "0xYourCookTokenAddress"; // <-- replace with your real COOK token address
+const COOK_TOKEN = "0xa26c15133463962514F9E6a31f44e6182841E59B"; 
 
 function StakingPage() {
   const wallet = useWallet();
