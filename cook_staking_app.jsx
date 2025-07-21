@@ -3,19 +3,17 @@ import { useEffect, useState } from "react";
 import {
   ThirdwebProvider,
   useWallet,
-  useConnect,
+  useConnectWallet,
   useDisconnect,
-  metamaskWallet,
   useActiveWalletConnectionStatus,
+  ConnectButton,
 } from "thirdweb/react";
 import {
   createThirdwebClient,
   defineChain,
   getContract,
   toTokens,
-  resolveMethod,
 } from "thirdweb";
-import { ConnectButton } from "thirdweb/react";
 
 const client = createThirdwebClient({
   clientId: "b2f0efa779d1c21ac55d26906bc544ae",
@@ -23,11 +21,11 @@ const client = createThirdwebClient({
 
 const base = defineChain(8453);
 const STAKING_CONTRACT = "0x455145789A6EFC690883b9E2467051169A839766";
-const COOK_TOKEN = "0xa26c15133463962514F9E6a31f44e6182841E59B"; 
+const COOK_TOKEN = "0xa26c15133463962514F9E6a31f44e6182841E59B"; // <-- replace with your real COOK token address
 
 function StakingPage() {
   const wallet = useWallet();
-  const connect = useConnect();
+  const { connect, isConnecting } = useConnectWallet();
   const disconnect = useDisconnect();
   const [cookBalance, setCookBalance] = useState("0");
   const [stakeAmount, setStakeAmount] = useState("");
@@ -91,9 +89,15 @@ function StakingPage() {
     <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-4">Stake COOK, Earn MCADE</h1>
 
-      <ConnectButton client={client} chain={base} connect={connect(metamaskWallet())} />
-
-      {wallet && (
+      {!wallet ? (
+        <button
+          onClick={() => connect()}
+          disabled={isConnecting}
+          className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded"
+        >
+          {isConnecting ? "Connecting..." : "Connect Wallet"}
+        </button>
+      ) : (
         <>
           <p className="my-4">Your COOK Balance: {cookBalance}</p>
 
@@ -120,6 +124,13 @@ function StakingPage() {
           >
             {loading ? "Claiming..." : "Claim Rewards"}
           </button>
+
+          <button
+            onClick={() => disconnect()}
+            className="mt-6 underline text-sm text-gray-400 hover:text-white"
+          >
+            Disconnect
+          </button>
         </>
       )}
     </div>
@@ -132,4 +143,4 @@ export default function App() {
       <StakingPage />
     </ThirdwebProvider>
   );
-} // End App.jsx
+}
